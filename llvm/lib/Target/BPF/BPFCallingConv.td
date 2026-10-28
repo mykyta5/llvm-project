@@ -41,6 +41,10 @@ def CC_BPF32 : CallingConv<[
   CCIfType<[i64], CCAssignToRegWithShadow<[R1, R2, R3, R4, R5],
                                           [W1, W2, W3, W4, W5]>>,
 
+  // Stack slots are 64-bit. Promote i32 args to i64, so that the caller
+  // extends signext/zeroext args to the full slot, as without ALU32.
+  CCIfType<[i32], CCPromoteToType<i64>>,
+
   // Could be assigned to the stack in 8-byte aligned units, but unsupported
   CCAssignToStack<8, 8>
 ]>;
